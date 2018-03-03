@@ -1,0 +1,4 @@
+name: LocyCommand
+main: com.pcd.locycommand.LocyCommand
+version: 1.0.0
+author: LocyDragon
