@@ -1,4 +1,4 @@
 name: LocyCommand
-main: LocyCommand
+main: com.locycommand.LocyCommand
 version: 1.0.0
 author: LocyDragon
