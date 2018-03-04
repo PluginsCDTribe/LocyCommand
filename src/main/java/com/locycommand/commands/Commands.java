@@ -20,6 +20,8 @@ public class Commands implements CommandExecutor {
             sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd clean [指令名] ——清理一个指令内所有内容.");
             sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd removeItem [指令名] [内容ID] ——清理一个指令内某条内容.");
             sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd itemList 查看所有内容");
+            sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd usage [指令名] [发送的信息] ——执行指令时参数不够时发送的信息");
+            sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd sendmsg [指令名] [发送的信息] ——执行指令时发送信息.");
             return false;
         }
         if (args[0].equalsIgnoreCase("create")) {

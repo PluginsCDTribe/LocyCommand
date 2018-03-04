@@ -19,6 +19,9 @@ public class Centre {
             return null;
         }
         CommandInvoker.registerCommand(cmdName);
+        if (Bukkit.getPluginCommand(cmdName) == null) {
+            return null;
+        }
         Bukkit.getPluginCommand(cmdName).setExecutor(LocyCommand.base);
         return new Cmd(cmdName);
     }

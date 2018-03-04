@@ -41,11 +41,6 @@ public class LocyCommand extends JavaPlugin {
         }
         commands = registerNewConfiguration("commands", null);
         Settings.config = commands;
-        new CommandWatcher().runTaskTimer(this, 0, 20*5);
-        for (String keys : Settings.getEntry().getKeys(false)) {
-            CommandInvoker.registerCommand(keys);
-            Bukkit.getPluginCommand(keys).setExecutor(base);
-        }
         Bukkit.getPluginCommand("lcmd").setExecutor(new Commands());
         Obj.addOne("SENDMESSAGE");
         Bukkit.getPluginManager().registerEvents(new InterruptLayer(), this);
@@ -65,6 +60,7 @@ public class LocyCommand extends JavaPlugin {
     public void addOnEnableMsg(String msg) { msgList.add(msg); }
     private FileConfiguration registerNewConfiguration(String configName, HashMap<String,Object> defaults) {
         File f = new File(".//plugins//LocyCommand//"+configName+".yml");
+        f.getParentFile().mkdirs();
         FileConfiguration config = null;
         if (!f.exists()) {
             try {
