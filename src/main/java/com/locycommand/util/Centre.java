@@ -1,6 +1,7 @@
 package com.locycommand.util;
 
 import com.locycommand.LocyCommand;
+import com.locycommand.settings.Settings;
 import org.bukkit.Bukkit;
 
 public class Centre {
@@ -8,6 +9,9 @@ public class Centre {
         return Bukkit.getPluginCommand(commandName) != null;
     }
     public static Cmd getCmd(String cmd) {
+        if (Settings.getEntry().getString(cmd+".usage", "null").equals("null")) {
+            return null;
+        }
         return new Cmd(cmd);
     }
     public static Cmd newCommand(String cmdName) {

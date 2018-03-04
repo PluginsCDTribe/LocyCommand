@@ -5,6 +5,7 @@ import com.locycommand.commands.Commands;
 import com.locycommand.settings.CommandWatcher;
 import com.locycommand.settings.Settings;
 import com.locycommand.util.CommandInvoker;
+import com.locycommand.util.Obj;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -43,6 +44,7 @@ public class LocyCommand extends JavaPlugin {
             Bukkit.getPluginCommand(keys).setExecutor(base);
         }
         Bukkit.getPluginCommand("lcmd").setExecutor(new Commands());
+        Obj.addOne("SENDMESSAGE");
         instance = this;
     }
     @Override
