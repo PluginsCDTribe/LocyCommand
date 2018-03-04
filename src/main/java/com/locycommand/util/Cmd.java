@@ -10,6 +10,7 @@ import java.util.List;
 public class Cmd {
     private String commandName;
     private List<Flag> flagList = new ArrayList<>();
+    private String usage = "";
     protected Cmd(String commandName) {
         this.commandName = commandName;
         for (String s : Settings.getEntry().getStringList(this.commandName+".flags")) {
@@ -18,6 +19,7 @@ public class Cmd {
         if (flagList.isEmpty()) {
             Settings.getEntry().set(this.commandName+".usage", "using");
         }
+        usage = Settings.getEntry().getString(this.commandName+".using", null);
     }
     public List<Flag> getFlags() {
         return this.flagList;
@@ -62,5 +64,16 @@ public class Cmd {
     public void cleanFlags() {
         this.flagList.clear();
         save();
+    }
+    public String getUsage() {
+        return this.usage;
+    }
+    public void setUsage(String usage) {
+        Settings.getEntry().set(this.commandName+".using", usage);
+        try {
+            Settings.getEntry().save(new File(".//plugins//LocyCommand//commands.yml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

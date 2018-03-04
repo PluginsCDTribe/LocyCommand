@@ -94,7 +94,22 @@ public class Commands implements CommandExecutor {
                 sender.sendMessage("§7空格请用_代替，可以使用PAPI变量，以及%player%玩家名字变量，以及 %args:x% 变量(x必须替换为第几个参数,如/xxx a,a就是第一个参数)");
             }
         } else if (args[0].equalsIgnoreCase("usage")) {
-
+            if (args.length == 3) {
+                String info = args[1];
+                while (info.startsWith("/")) {
+                    info = info.substring(1);
+                }
+                Cmd cmd = Centre.getCmd(info);
+                if (cmd == null) {
+                    sender.sendMessage("§7[§bLocyCommand§7]该指令不存在.");
+                    return false;
+                }
+                cmd.setUsage(args[2].replace("_", " "));
+                sender.sendMessage("§7[§bLocyCommand§7]成功设置了呐.");
+            } else {
+                sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd usage [指令名] [发送的信息] ——执行指令时参数不够时发送的信息");
+                sender.sendMessage("§7空格请用_代替");
+            }
         }
         return false;
     }

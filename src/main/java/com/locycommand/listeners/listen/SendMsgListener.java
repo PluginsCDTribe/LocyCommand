@@ -20,7 +20,7 @@ public class SendMsgListener implements Listener {
                 }
             }
         } catch (Exception exc) {
-
+            call.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', cmd.getUsage()));
         }
     }
 }
