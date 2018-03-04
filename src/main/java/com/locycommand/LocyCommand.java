@@ -2,10 +2,13 @@ package com.locycommand;
 
 import com.locycommand.commands.Base;
 import com.locycommand.commands.Commands;
+import com.locycommand.listeners.InterruptLayer;
+import com.locycommand.listeners.listen.SendMsgListener;
 import com.locycommand.settings.CommandWatcher;
 import com.locycommand.settings.Settings;
 import com.locycommand.util.CommandInvoker;
 import com.locycommand.util.Obj;
+import com.locycommand.util.PAPIInvoker;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -45,6 +48,13 @@ public class LocyCommand extends JavaPlugin {
         }
         Bukkit.getPluginCommand("lcmd").setExecutor(new Commands());
         Obj.addOne("SENDMESSAGE");
+        Bukkit.getPluginManager().registerEvents(new InterruptLayer(), this);
+        Bukkit.getPluginManager().registerEvents(new SendMsgListener(), this);
+        if (PAPIInvoker.hasPAPI()) {
+            getLogger().info("已经和papi挂钩.");
+        } else {
+            getLogger().info("服务器未安装papi.");
+        }
         instance = this;
     }
     @Override
