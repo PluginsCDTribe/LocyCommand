@@ -4,7 +4,8 @@ import com.locycommand.LocyCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
-import sun.plugin2.main.server.Plugin;
+import org.bukkit.plugin.Plugin;
+
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
