@@ -2,11 +2,12 @@ package com.locycommand;
 
 import com.locycommand.commands.Base;
 import com.locycommand.commands.Commands;
+import com.locycommand.listeners.Freight;
 import com.locycommand.listeners.InterruptLayer;
+import com.locycommand.listeners.listen.ConsoleCommandListener;
+import com.locycommand.listeners.listen.PlayerCommandListener;
 import com.locycommand.listeners.listen.SendMsgListener;
-import com.locycommand.settings.CommandWatcher;
 import com.locycommand.settings.Settings;
-import com.locycommand.util.CommandInvoker;
 import com.locycommand.util.Obj;
 import com.locycommand.util.PAPIInvoker;
 import org.bukkit.Bukkit;
@@ -24,8 +25,10 @@ import java.util.Map;
 public class LocyCommand extends JavaPlugin {
     public static LocyCommand instance;
     public static FileConfiguration commands;
+    public static FileConfiguration langConfig;
     List<String> msgList = new ArrayList<>();
     public static Base base = new Base();
+
     @Override
     public void onEnable() {
         addOnEnableMsg("===========[LocyCommand]===========");
@@ -42,9 +45,21 @@ public class LocyCommand extends JavaPlugin {
         commands = registerNewConfiguration("commands", null);
         Settings.config = commands;
         Bukkit.getPluginCommand("lcmd").setExecutor(new Commands());
+        HashMap<String,Object> lang = new HashMap<>();
+        lang.put("NoPermission", "&e你没有使用这个指令的权限.");
+        lang.put("NoItem", "&e你没有足够的物品来使用这个指令.");
+        langConfig = registerNewConfiguration("lang", lang);
         Obj.addOne("SENDMESSAGE");
+        Obj.addOne("PERMISSION");
+        Obj.addOne("CONSOLECMD");
+        Obj.addOne("PLAYERCMD");
+        Obj.addOne("HASITEM");
+        Obj.addOne("DELAY");
         Bukkit.getPluginManager().registerEvents(new InterruptLayer(), this);
+        Bukkit.getPluginManager().registerEvents(new Freight(), this);
         Bukkit.getPluginManager().registerEvents(new SendMsgListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ConsoleCommandListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerCommandListener(), this);
         if (PAPIInvoker.hasPAPI()) {
             getLogger().info("已经和papi挂钩.");
         } else {
@@ -52,14 +67,21 @@ public class LocyCommand extends JavaPlugin {
         }
         instance = this;
     }
+
     @Override
-    public void onDisable() {}
+    public void onDisable() {
+    }
+
     public static LocyCommand getInstance() {
         return instance;
     }
-    public void addOnEnableMsg(String msg) { msgList.add(msg); }
-    private FileConfiguration registerNewConfiguration(String configName, HashMap<String,Object> defaults) {
-        File f = new File(".//plugins//LocyCommand//"+configName+".yml");
+
+    public void addOnEnableMsg(String msg) {
+        msgList.add(msg);
+    }
+
+    private FileConfiguration registerNewConfiguration(String configName, HashMap<String, Object> defaults) {
+        File f = new File(".//plugins//LocyCommand//" + configName + ".yml");
         f.getParentFile().mkdirs();
         FileConfiguration config = null;
         if (!f.exists()) {

@@ -5,16 +5,14 @@ import com.locycommand.util.Cmd;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 
-//指令拦截层
-public class CommandInterruptLayer extends Event {
+public class BeforeCommandUseEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     Player target;
     String command;
     String args[];
 
-    public CommandInterruptLayer(Player target, String command, String args[]) {
+    public BeforeCommandUseEvent(Player target, String command, String args[]) {
         this.target = target;
         this.command = command;
         this.args = args;

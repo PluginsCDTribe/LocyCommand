@@ -4,6 +4,7 @@ import com.locycommand.util.Centre;
 import com.locycommand.util.Cmd;
 import com.locycommand.util.Flag;
 import com.locycommand.util.Obj;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,6 +23,10 @@ public class Commands implements CommandExecutor {
             sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd itemList 查看所有内容");
             sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd usage [指令名] [发送的信息] ——执行指令时参数不够时发送的信息");
             sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd sendmsg [指令名] [发送的信息] ——执行指令时发送信息.");
+            sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd ccommand [指令名] [发送的信息] ——执行指令时执行控制台指令");
+            sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd pcommand [指令名] [发送的信息] ——执行指令时执行为玩家指令");
+            sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd haspermission [指令名] [权限] ——执行指令时所需的权限");
+            sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd hasItem [指令名] [物品id] ——执行指令时所需的物品");
             return false;
         }
         if (args[0].equalsIgnoreCase("create")) {
@@ -33,7 +38,7 @@ public class Commands implements CommandExecutor {
                 if (Centre.newCommand(info) == null) {
                     sender.sendMessage("§7[§bLocyCommand§7]该指令已经存在于这个服务器了.");
                 } else {
-                    sender.sendMessage("§7[§bLocyCommand§7]创建指令"+info+"成功，现在你可以给指令添加内容了。使用 /"+info+" 执行指令.");
+                    sender.sendMessage("§7[§bLocyCommand§7]创建指令" + info + "成功，现在你可以给指令添加内容了。使用 /" + info + " 执行指令.");
                 }
             } else {
                 sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd create [指令名] ——创建一个空的指令.");
@@ -112,7 +117,98 @@ public class Commands implements CommandExecutor {
                 sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd usage [指令名] [发送的信息] ——执行指令时参数不够时发送的信息");
                 sender.sendMessage("§7空格请用_代替");
             }
+        } else if (args[0].equalsIgnoreCase("ccommand")) {
+            if (args.length == 3) {
+                String info = args[1];
+                while (info.startsWith("/")) {
+                    info = info.substring(1);
+                }
+                Cmd cmd = Centre.getCmd(info);
+                if (cmd == null) {
+                    sender.sendMessage("§7[§bLocyCommand§7]该指令不存在.");
+                    return false;
+                }
+                while (args[2].startsWith("/")) {
+                    args[2] = args[2].substring(1);
+                }
+                Flag flag = new Flag(Obj.consoleCmd, new String[]{args[2].replace("_", " ")});
+                cmd.addFlag(flag);
+                sender.sendMessage("§7[§bLocyCommand§7]成功设置了呐.");
+            } else {
+                sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd ccommand [指令名] [发送的信息] ——执行指令时执行控制台指令");
+                sender.sendMessage("§7空格请用_代替，可以使用PAPI变量，以及%player%玩家名字变量，以及 %args:x% 变量(x必须替换为第几个参数,如/xxx a,a就是第一个参数)");
+            }
+        } else if (args[0].equalsIgnoreCase("pcommand")) {
+            if (args.length == 3) {
+                String info = args[1];
+                while (info.startsWith("/")) {
+                    info = info.substring(1);
+                }
+                Cmd cmd = Centre.getCmd(info);
+                if (cmd == null) {
+                    sender.sendMessage("§7[§bLocyCommand§7]该指令不存在.");
+                    return false;
+                }
+                if (!args[2].startsWith("/")) {
+                    args[2] = "/" + args[2];
+                }
+                Flag flag = new Flag(Obj.playerCmd, new String[]{args[2].replace("_", " ")});
+                cmd.addFlag(flag);
+                sender.sendMessage("§7[§bLocyCommand§7]成功设置了呐.");
+            } else {
+                sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd pcommand [指令名] [发送的信息] ——执行指令时执行为玩家指令");
+                sender.sendMessage("§7空格请用_代替，可以使用PAPI变量，以及%player%玩家名字变量，以及 %args:x% 变量(x必须替换为第几个参数,如/xxx a,a就是第一个参数)");
+            }
+        } else if (args[0].equalsIgnoreCase("haspermission")) {
+            if (args.length == 3) {
+                args[2] = "LocyCommand." + args[2];
+                String info = args[1];
+                while (info.startsWith("/")) {
+                    info = info.substring(1);
+                }
+                Cmd cmd = Centre.getCmd(info);
+                if (cmd == null) {
+                    sender.sendMessage("§7[§bLocyCommand§7]该指令不存在.");
+                    return false;
+                }
+                Flag flag = new Flag(Obj.hasPermission, new String[]{args[2]});
+                cmd.addFlag(flag);
+                sender.sendMessage("§7[§bLocyCommand§7]现在需要 " + args[2] + " 这个权限才能执行指令啦.");
+            } else {
+                sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd haspermission [指令名] [权限] ——执行指令时所需的权限");
+                sender.sendMessage("§7如/lcmd haspermission 指令 permission ——即为需要&c&lLocyCommand.permission 的权限.");
+            }
+        } else if (args[0].equalsIgnoreCase("hasItem")) {
+            if (args.length == 3) {
+                if (!isInt(args[2])) {
+                    sender.sendMessage("§7[§bLocyCommand§7]" + args[2] + " 不是数字.");
+                    return false;
+                }
+                String info = args[1];
+                while (info.startsWith("/")) {
+                    info = info.substring(1);
+                }
+                Cmd cmd = Centre.getCmd(info);
+                if (cmd == null) {
+                    sender.sendMessage("§7[§bLocyCommand§7]该指令不存在.");
+                    return false;
+                }
+                Flag flag = new Flag(Obj.hasItem, new String[]{args[2]});
+                cmd.addFlag(flag);
+                sender.sendMessage("§7[§bLocyCommand§7]现在需要 " + Material.getMaterial(Integer.valueOf(args[2])).toString() + " 这个物品才能执行指令啦.");
+            } else {
+                sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd hasItem [指令名] [物品id] ——执行指令时所需的物品");
+            }
         }
         return false;
+    }
+
+    public boolean isInt(String isInt) {
+        try {
+            Integer.valueOf(isInt);
+            return true;
+        } catch (Exception exc) {
+            return false;
+        }
     }
 }

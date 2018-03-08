@@ -12,27 +12,34 @@ public class ThenCall extends Event {
     Player target;
     String command;
     String args[];
+
     public ThenCall(Player target, String command, String args[]) {
         this.target = target;
         this.command = command;
         this.args = args;
     }
+
     public String[] getArgs() {
         return this.args;
     }
+
     public Player getPlayer() {
         return this.target;
     }
+
     public String getCommand() {
         return this.command;
     }
+
     public Cmd getCmd() {
         return Centre.getCmd(this.command);
     }
+
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
+
     public static HandlerList getHandlerList() {
         return handlers;
     }

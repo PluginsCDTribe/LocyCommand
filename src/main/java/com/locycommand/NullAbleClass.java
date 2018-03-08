@@ -1,4 +1,3 @@
 package com.locycommand;
 
-public class NullAbleClass {
-}
+public class NullAbleClass {}

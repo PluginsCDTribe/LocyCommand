@@ -11,38 +11,44 @@ public class Cmd {
     private String commandName;
     private List<Flag> flagList = new ArrayList<>();
     private String usage = "";
+
     protected Cmd(String commandName) {
         this.commandName = commandName;
-        for (String s : Settings.getEntry().getStringList(this.commandName+".flags")) {
+        for (String s : Settings.getEntry().getStringList(this.commandName + ".flags")) {
             flagList.add(Flag.deSerialize(s));
         }
         if (flagList.isEmpty()) {
-            Settings.getEntry().set(this.commandName+".usage", "using");
+            Settings.getEntry().set(this.commandName + ".usage", "using");
         }
-        usage = Settings.getEntry().getString(this.commandName+".using", null);
+        usage = Settings.getEntry().getString(this.commandName + ".using", null);
     }
+
     public List<Flag> getFlags() {
         return this.flagList;
     }
+
     public String getCommand() {
         return this.commandName;
     }
+
     public void save() {
         List<String> format = new ArrayList<>();
         for (Flag flag : this.flagList) {
             format.add(flag.serialize());
         }
-        Settings.getEntry().set(this.commandName+".flags", format);
+        Settings.getEntry().set(this.commandName + ".flags", format);
         try {
             Settings.getEntry().save(new File(".//plugins//LocyCommand//commands.yml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     public void addFlag(Flag flag) {
         flagList.add(flag);
         save();
     }
+
     public List<String[]> getArgs(String flagHead) {
         List<String[]> args = new ArrayList<>();
         for (Flag flag : getFlags()) {
@@ -52,6 +58,7 @@ public class Cmd {
         }
         return args;
     }
+
     public void removeFlag(String flagHead) {
         List<Flag> newList = new ArrayList<>();
         for (Flag flag : getFlags()) {
@@ -61,19 +68,27 @@ public class Cmd {
         }
         save();
     }
+
     public void cleanFlags() {
         this.flagList.clear();
         save();
     }
+
     public String getUsage() {
         return this.usage;
     }
+
     public void setUsage(String usage) {
-        Settings.getEntry().set(this.commandName+".using", usage);
+        Settings.getEntry().set(this.commandName + ".using", usage);
         try {
             Settings.getEntry().save(new File(".//plugins//LocyCommand//commands.yml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setFlags(List<Flag> flagList) {
+        this.flagList = flagList;
+        save();
     }
 }

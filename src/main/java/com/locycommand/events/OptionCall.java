@@ -1,23 +1,26 @@
 package com.locycommand.events;
 
-import com.locycommand.util.Centre;
-import com.locycommand.util.Cmd;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 
-//指令拦截层
-public class CommandInterruptLayer extends Event {
+public class OptionCall extends Event {
     private static final HandlerList handlers = new HandlerList();
     Player target;
-    String command;
+    String obj;
     String args[];
+    String commandArgs[];
 
-    public CommandInterruptLayer(Player target, String command, String args[]) {
+    public OptionCall(Player target, String obj, String args[], String commandArgs[]) {
         this.target = target;
-        this.command = command;
+        this.obj = obj;
         this.args = args;
+        this.commandArgs = commandArgs;
+    }
+
+    public String[] getCommandArgs() {
+        return this.commandArgs;
     }
 
     public String[] getArgs() {
@@ -28,12 +31,8 @@ public class CommandInterruptLayer extends Event {
         return this.target;
     }
 
-    public String getCommand() {
-        return this.command;
-    }
-
-    public Cmd getCmd() {
-        return Centre.getCmd(this.command);
+    public String getObj() {
+        return this.obj;
     }
 
     @Override
