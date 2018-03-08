@@ -4,9 +4,7 @@ import com.locycommand.commands.Base;
 import com.locycommand.commands.Commands;
 import com.locycommand.listeners.Freight;
 import com.locycommand.listeners.InterruptLayer;
-import com.locycommand.listeners.listen.ConsoleCommandListener;
-import com.locycommand.listeners.listen.PlayerCommandListener;
-import com.locycommand.listeners.listen.SendMsgListener;
+import com.locycommand.listeners.listen.*;
 import com.locycommand.settings.Settings;
 import com.locycommand.settings.Usage;
 import com.locycommand.util.BukkitVersionManager;
@@ -63,11 +61,16 @@ public class LocyCommand extends JavaPlugin {
         Obj.addOne("PLAYERCMD");
         Obj.addOne("HASITEM");
         Obj.addOne("DELAY");
+        Obj.addOne("COSTMONEY");
+        Obj.addOne("TITLE");
+        Obj.addOne("ACTIONBAR");
         Bukkit.getPluginManager().registerEvents(new InterruptLayer(), this);
         Bukkit.getPluginManager().registerEvents(new Freight(), this);
         Bukkit.getPluginManager().registerEvents(new SendMsgListener(), this);
         Bukkit.getPluginManager().registerEvents(new ConsoleCommandListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerCommandListener(), this);
+        Bukkit.getPluginManager().registerEvents(new TitleListener(), this);
+        Bukkit.getPluginManager().registerEvents(new ActionBarListener(), this);
         if (!(vm.version.startsWith("v1_4") || vm.version.startsWith("v1_5") || vm.version.startsWith("v1_6") || vm.version.startsWith("v1_7"))) {
             Usage.useTitle = true;
             getLogger().info("启用title功能.");

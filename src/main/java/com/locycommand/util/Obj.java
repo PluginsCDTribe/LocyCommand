@@ -12,6 +12,8 @@ public class Obj {
     public static final String hasItem = "HASITEM";
     public static final String delay = "DELAY";
     public static final String cost = "COSTMONEY";
+    public static final String title = "TITLE";
+    public static final String actionBar = "ACTIONBAR";
 
     public static void addOne(String s) {
         list.add(s);

@@ -1,6 +1,7 @@
 package com.locycommand.commands;
 
 import com.locycommand.LocyCommand;
+import com.locycommand.settings.Usage;
 import com.locycommand.util.Centre;
 import com.locycommand.util.Cmd;
 import com.locycommand.util.Flag;
@@ -33,6 +34,9 @@ public class Commands implements CommandExecutor {
             sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd hasItem [指令名] [物品id] ——执行指令时所需的物品");
             sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd jobs [指令名] ——查看该指令所有需要完成的工作.");
             sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd delay [指令名] [序号] [秒数] ——在该指令的指定序号的工作后面停顿秒数.");
+            sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd actionbar [指令名] [信息] ——发送小字ActionBar.");
+            sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd cost [指令名] [金钱] ——设置指令扣钱.");
+            sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd title [指令名] [大标题] [小标题] [淡入时间] [停留时间] [淡出时间] ——发送全屏Title.");
             return false;
         }
         if (args[0].equalsIgnoreCase("create")) {
@@ -274,6 +278,54 @@ public class Commands implements CommandExecutor {
                 sender.sendMessage("§7[§bLocyCommand§7]成功设置了呐.");
             } else {
                 sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd cost [指令名] [金钱] ——设置指令扣钱.");
+            }
+        } else if (args[0].equalsIgnoreCase("title")) {
+            if (args.length == 7) {
+                if (Usage.useTitle == false) {
+                    sender.sendMessage("§7[§bLocyCommand§7]你的服务器版本并不支持全屏Title.");
+                    return false;
+                }
+                String info = args[1];
+                while (info.startsWith("/")) {
+                    info = info.substring(1);
+                }
+                Cmd cmd = Centre.getCmd(info);
+                if (cmd == null) {
+                    sender.sendMessage("§7[§bLocyCommand§7]该指令不存在.");
+                    return false;
+                }
+                if (!isInt(args[4]) || !isInt(args[5]) || !isInt(args[6])) {
+                    sender.sendMessage("§7[§bLocyCommand§7]不是数字.");
+                    return false;
+                }
+                Flag flag = new Flag(Obj.title, new String[]{args[2].replace("_", " "), args[3].replace("_", " "), args[4], args[5], args[6]});
+                cmd.addFlag(flag);
+                sender.sendMessage("§7[§bLocyCommand§7]成功设置了呐.");
+            } else {
+                sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd title [指令名] [大标题] [小标题] [淡入时间] [停留时间] [淡出时间] ——发送全屏Title.");
+                sender.sendMessage("§7空格请用_代替，标题可以使用PAPI变量，以及%player%玩家名字变量，以及 %args:x% 变量(x必须替换为第几个参数,如/xxx a,a就是第一个参数)");
+            }
+        } else if (args[0].equalsIgnoreCase("actionbar")) {
+            if (args.length == 3) {
+                if (Usage.useActionBar == false) {
+                    sender.sendMessage("§7[§bLocyCommand§7]你的服务器版本并不支持小字ActionBar.");
+                    return false;
+                }
+                String info = args[1];
+                while (info.startsWith("/")) {
+                    info = info.substring(1);
+                }
+                Cmd cmd = Centre.getCmd(info);
+                if (cmd == null) {
+                    sender.sendMessage("§7[§bLocyCommand§7]该指令不存在.");
+                    return false;
+                }
+                Flag flag = new Flag(Obj.actionBar, new String[]{args[2].replace("_", " ")});
+                cmd.addFlag(flag);
+                sender.sendMessage("§7[§bLocyCommand§7]成功设置了呐.");
+            } else {
+                sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd actionbar [指令名] [信息] ——发送小字ActionBar.");
+                sender.sendMessage("§7空格请用_代替，可以使用PAPI变量，以及%player%玩家名字变量，以及 %args:x% 变量(x必须替换为第几个参数,如/xxx a,a就是第一个参数)");
             }
         }
         return false;
