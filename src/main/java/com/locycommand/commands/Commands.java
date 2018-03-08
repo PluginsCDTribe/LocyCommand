@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Commands implements CommandExecutor {
@@ -243,7 +244,7 @@ public class Commands implements CommandExecutor {
                     z++;
                     sender.sendMessage("§7任务序号: §b"+z);
                     sender.sendMessage("§7执行内容: §b"+cmd.getFlags().get(i).getHead());
-                    sender.sendMessage("§7执行属性: §b"+cmd.getFlags().get(i).getArgs().toString());
+                    sender.sendMessage("§7执行属性: §b"+ Arrays.asList(cmd.getFlags().get(i).getArgs()).toString());
                 }
             } else {
                 sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd jobs [指令名] ——查看该指令所有需要完成的工作.");

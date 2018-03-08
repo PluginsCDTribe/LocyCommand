@@ -2,5 +2,6 @@ name: LocyCommand
 main: com.locycommand.LocyCommand
 version: 1.0.0
 author: LocyDragon
+softdepend: [Vault]
 commands:
   lcmd:

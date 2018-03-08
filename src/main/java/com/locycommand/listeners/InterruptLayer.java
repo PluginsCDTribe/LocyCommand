@@ -21,7 +21,11 @@ public class InterruptLayer implements Listener {
                 ArgsPapi.replaceAll(flag.serialize().split("\\*", 2)[1], call.getArgs());
             }
         } catch (Exception exc) {
-            call.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', cmd.getUsage()));
+            try {
+                call.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', cmd.getUsage()));
+            } catch (Exception e) {
+                call.getPlayer().sendMessage("§e指令输入错误.");
+            }
             return;
         }
         for (Flag flag : cmd.getFlags()) {
