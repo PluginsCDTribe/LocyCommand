@@ -99,6 +99,13 @@
             <version>1.8.3-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>ff</groupId>
+            <artifactId>ff</artifactId>
+            <version>ff</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/Vault.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>
