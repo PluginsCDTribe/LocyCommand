@@ -1,5 +1,6 @@
 package com.locycommand.commands;
 
+import com.locycommand.LocyCommand;
 import com.locycommand.util.Centre;
 import com.locycommand.util.Cmd;
 import com.locycommand.util.Flag;
@@ -248,6 +249,31 @@ public class Commands implements CommandExecutor {
                 }
             } else {
                 sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd jobs [指令名] ——查看该指令所有需要完成的工作.");
+            }
+        } else if (args[0].equalsIgnoreCase("cost")) {
+            if (args.length == 3) {
+                if (LocyCommand.isUseValut() == false) {
+                    sender.sendMessage("§c§l你的服务器没有 Vault 经济插件，无法使用扣钱功能.");
+                    return false;
+                }
+                String info = args[1];
+                while (info.startsWith("/")) {
+                    info = info.substring(1);
+                }
+                Cmd cmd = Centre.getCmd(info);
+                if (cmd == null) {
+                    sender.sendMessage("§7[§bLocyCommand§7]该指令不存在.");
+                    return false;
+                }
+                if (!isInt(args[2])) {
+                    sender.sendMessage("§7[§bLocyCommand§7]不是数字.");
+                    return false;
+                }
+                Flag flag = new Flag(Obj.cost, new String[]{args[2]});
+                cmd.addFlag(flag);
+                sender.sendMessage("§7[§bLocyCommand§7]成功设置了呐.");
+            } else {
+                sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd cost [指令名] [金钱] ——设置指令扣钱.");
             }
         }
         return false;

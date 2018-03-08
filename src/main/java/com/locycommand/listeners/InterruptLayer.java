@@ -49,6 +49,16 @@ public class InterruptLayer implements Listener {
                     call.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', LocyCommand.langConfig.getString("NoItem", "§e你没有足够的物品来使用这个指令.")));
                     return;
                 }
+            } else if (flag.getHead().equals(Obj.cost)) {
+                int money = Integer.valueOf(flag.getArgs()[0]);
+                if (LocyCommand.isUseValut()) {
+                    if (!(VaultManager.getBalance(call.getPlayer().getName()) >= money)) {
+                        call.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', LocyCommand.langConfig.getString("NoSuchMoney", "&e你的金币不足.")));
+                        return;
+                    } else {
+                        VaultManager.take(call.getPlayer().getName(), (double)money);
+                    }
+                }
             }
         }
         Bukkit.getPluginManager().callEvent(new ThenCall(call.getPlayer(), call.getCommand(), call.getArgs()));

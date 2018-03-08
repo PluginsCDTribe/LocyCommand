@@ -11,6 +11,7 @@ public class Obj {
     public static final String playerCmd = "PLAYERCMD";
     public static final String hasItem = "HASITEM";
     public static final String delay = "DELAY";
+    public static final String cost = "COSTMONEY";
 
     public static void addOne(String s) {
         list.add(s);

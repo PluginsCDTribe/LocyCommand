@@ -8,8 +8,12 @@ import com.locycommand.listeners.listen.ConsoleCommandListener;
 import com.locycommand.listeners.listen.PlayerCommandListener;
 import com.locycommand.listeners.listen.SendMsgListener;
 import com.locycommand.settings.Settings;
+import com.locycommand.settings.Usage;
+import com.locycommand.util.BukkitVersionManager;
 import com.locycommand.util.Obj;
 import com.locycommand.util.PAPIInvoker;
+import com.locycommand.util.VaultManager;
+import net.milkbowl.vault.Vault;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -28,9 +32,11 @@ public class LocyCommand extends JavaPlugin {
     public static FileConfiguration langConfig;
     List<String> msgList = new ArrayList<>();
     public static Base base = new Base();
-
+    private static boolean useValut = false;
+    public static BukkitVersionManager vm;
     @Override
     public void onEnable() {
+        vm = new BukkitVersionManager();
         addOnEnableMsg("===========[LocyCommand]===========");
         addOnEnableMsg("欢迎使用自定义指令插件 LocyCommand");
         addOnEnableMsg("作者: LocyDragon QQ2424441676");
@@ -49,6 +55,7 @@ public class LocyCommand extends JavaPlugin {
         lang.put("NoPermission", "&e你没有使用这个指令的权限.");
         lang.put("NoItem", "&e你没有足够的物品来使用这个指令.");
         lang.put("NotDone", "&e指令未完成.");
+        lang.put("NoSuchMoney", "&e你的金币不足.");
         langConfig = registerNewConfiguration("lang", lang);
         Obj.addOne("SENDMESSAGE");
         Obj.addOne("PERMISSION");
@@ -61,14 +68,31 @@ public class LocyCommand extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SendMsgListener(), this);
         Bukkit.getPluginManager().registerEvents(new ConsoleCommandListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerCommandListener(), this);
+        if (!(vm.version.startsWith("v1_4") || vm.version.startsWith("v1_5") || vm.version.startsWith("v1_6") || vm.version.startsWith("v1_7"))) {
+            Usage.useTitle = true;
+            getLogger().info("启用title功能.");
+            if (!vm.version.startsWith("v1_8")) {
+                Usage.useActionBar = true;
+                getLogger().info("启用actionbar功能.");
+            }
+        }
         if (PAPIInvoker.hasPAPI()) {
             getLogger().info("已经和papi挂钩.");
         } else {
             getLogger().info("服务器未安装papi.");
         }
+        if (VaultManager.loadLibrary()) {
+            useValut = true;
+            getLogger().info("已经和vault挂钩.");
+        } else {
+            useValut = false;
+            getLogger().info("找不到vault.无法使用关于经济的功能.");
+        }
         instance = this;
     }
-
+    public static boolean isUseValut() {
+        return useValut;
+    }
     @Override
     public void onDisable() {
     }
