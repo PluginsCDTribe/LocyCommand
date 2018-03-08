@@ -48,6 +48,7 @@ public class LocyCommand extends JavaPlugin {
         HashMap<String,Object> lang = new HashMap<>();
         lang.put("NoPermission", "&e你没有使用这个指令的权限.");
         lang.put("NoItem", "&e你没有足够的物品来使用这个指令.");
+        lang.put("NotDone", "&e指令未完成.");
         langConfig = registerNewConfiguration("lang", lang);
         Obj.addOne("SENDMESSAGE");
         Obj.addOne("PERMISSION");

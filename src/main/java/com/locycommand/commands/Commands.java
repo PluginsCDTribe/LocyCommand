@@ -9,6 +9,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import java.util.List;
+
 public class Commands implements CommandExecutor {
 
     @Override
@@ -27,6 +29,8 @@ public class Commands implements CommandExecutor {
             sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd pcommand [指令名] [发送的信息] ——执行指令时执行为玩家指令");
             sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd haspermission [指令名] [权限] ——执行指令时所需的权限");
             sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd hasItem [指令名] [物品id] ——执行指令时所需的物品");
+            sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd jobs [指令名] ——查看该指令所有需要完成的工作.");
+            sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd delay [指令名] [序号] [秒数] ——在该指令的指定序号的工作后面停顿秒数.");
             return false;
         }
         if (args[0].equalsIgnoreCase("create")) {
@@ -198,6 +202,51 @@ public class Commands implements CommandExecutor {
                 sender.sendMessage("§7[§bLocyCommand§7]现在需要 " + Material.getMaterial(Integer.valueOf(args[2])).toString() + " 这个物品才能执行指令啦.");
             } else {
                 sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd hasItem [指令名] [物品id] ——执行指令时所需的物品");
+            }
+        } else if (args[0].equalsIgnoreCase("delay")) {
+            if (args.length == 4) {
+                if (!isInt(args[2]) || !isInt(args[3])) {
+                    sender.sendMessage("§7[§bLocyCommand§7]不是数字.");
+                    return false;
+                }
+                String info = args[1];
+                while (info.startsWith("/")) {
+                    info = info.substring(1);
+                }
+                Cmd cmd = Centre.getCmd(info);
+                if (cmd == null) {
+                    sender.sendMessage("§7[§bLocyCommand§7]该指令不存在.");
+                    return false;
+                }
+                Flag flag = new Flag(Obj.delay, new String[]{args[3]});
+                List<Flag> flagList = cmd.getFlags();
+                flagList.add(Integer.valueOf(args[2]), flag);
+                cmd.setFlags(flagList);
+                sender.sendMessage("§7[§bLocyCommand§7]成功设置了呐.");
+            } else {
+                sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd delay [指令名] [序号] [秒数] ——在该指令的指定序号的工作后面停顿秒数.");
+                sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd jobs [指令名] ——查看该指令所有需要完成的工作.");
+            }
+        } else if (args[0].equalsIgnoreCase("jobs")) {
+            if (args.length == 2) {
+                String info = args[1];
+                while (info.startsWith("/")) {
+                    info = info.substring(1);
+                }
+                Cmd cmd = Centre.getCmd(info);
+                if (cmd == null) {
+                    sender.sendMessage("§7[§bLocyCommand§7]该指令不存在.");
+                    return false;
+                }
+                for (int i = 0;i < cmd.getFlags().size();i++) {
+                    int z = i;
+                    z++;
+                    sender.sendMessage("§7任务序号: §b"+z);
+                    sender.sendMessage("§7执行内容: §b"+cmd.getFlags().get(i).getHead());
+                    sender.sendMessage("§7执行属性: §b"+cmd.getFlags().get(i).getArgs().toString());
+                }
+            } else {
+                sender.sendMessage("§7[§bLocyCommand§7]使用/lcmd jobs [指令名] ——查看该指令所有需要完成的工作.");
             }
         }
         return false;
