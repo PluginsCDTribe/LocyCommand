@@ -59,8 +59,46 @@ public class InterruptLayer implements Listener {
                         VaultManager.take(call.getPlayer().getName(), (double)money);
                     }
                 }
+            } else if (flag.getHead().equals(Obj.isInt)) {
+                int where = Integer.valueOf(flag.getArgs()[0]);
+                try {
+                    if (!isInt(call.getArgs()[where-1])) {
+                        call.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', LocyCommand.langConfig.getString("IsNotInt", "&e&l请输入一个正确的数字.")));
+                        return;
+                    }
+                } catch (Exception exc) {
+                    try {
+                        call.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', cmd.getUsage()));
+                    } catch (Exception e) {
+                        call.getPlayer().sendMessage("§e指令输入错误.");
+                    }
+                    return;
+                }
+            } else if (flag.getHead().equals(Obj.isPlayer)) {
+                int where = Integer.valueOf(flag.getArgs()[0]);
+                try {
+                    if (Bukkit.getPlayer(call.getArgs()[where-1]) == null) {
+                        call.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', LocyCommand.langConfig.getString("IsNotPlayer", "&e&l请输入一个正确的玩家.")));
+                        return;
+                    }
+                } catch (Exception exc) {
+                    try {
+                        call.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', cmd.getUsage()));
+                    } catch (Exception e) {
+                        call.getPlayer().sendMessage("§e指令输入错误.");
+                    }
+                    return;
+                }
             }
         }
         Bukkit.getPluginManager().callEvent(new ThenCall(call.getPlayer(), call.getCommand(), call.getArgs()));
+    }
+    public boolean isInt(String isInt) {
+        try {
+            Integer.valueOf(isInt);
+            return true;
+        } catch (Exception exc) {
+            return false;
+        }
     }
 }

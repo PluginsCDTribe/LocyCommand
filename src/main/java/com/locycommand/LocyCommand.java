@@ -54,6 +54,8 @@ public class LocyCommand extends JavaPlugin {
         lang.put("NoItem", "&e你没有足够的物品来使用这个指令.");
         lang.put("NotDone", "&e指令未完成.");
         lang.put("NoSuchMoney", "&e你的金币不足.");
+        lang.put("IsNotInt", "&e&l请输入一个正确的数字.");
+        lang.put("IsNotPlayer", "&e&l请输入一个正确的玩家.");
         langConfig = registerNewConfiguration("lang", lang);
         Obj.addOne("SENDMESSAGE");
         Obj.addOne("PERMISSION");
@@ -64,6 +66,8 @@ public class LocyCommand extends JavaPlugin {
         Obj.addOne("COSTMONEY");
         Obj.addOne("TITLE");
         Obj.addOne("ACTIONBAR");
+        Obj.addOne("ISPLAYER");
+        Obj.addOne("ISINT");
         Bukkit.getPluginManager().registerEvents(new InterruptLayer(), this);
         Bukkit.getPluginManager().registerEvents(new Freight(), this);
         Bukkit.getPluginManager().registerEvents(new SendMsgListener(), this);
